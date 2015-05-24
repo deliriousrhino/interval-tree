@@ -1,3 +1,5 @@
+'use strict';
+
 var SortedList = require('sortedlist');
 
 /**
@@ -10,24 +12,24 @@ var SortedList = require('sortedlist');
  *
  **/
 function IntervalTree(center, options) {
-  options || (options = {});
+  options = options || {};
 
   this.startKey     = options.startKey || 0; // start key
   this.endKey       = options.endKey   || 1; // end key
   this.intervalHash = {};                    // id => interval object
   this.pointTree = new SortedList({          // b-tree of start, end points 
     compare: function(a, b) {
-      if (a == null) return -1;
-      if (b == null) return  1;
+      if (a === null) return -1;
+      if (b === null) return  1;
       var c = a[0]- b[0];
-      return (c > 0) ? 1 : (c == 0)  ? 0 : -1;
+      return (c > 0) ? 1 : (c === 0)  ? 0 : -1;
     }
   });
 
   this._autoIncrement = 0;
 
   // index of the root node
-  if (!center || typeof center != 'number') {
+  if (!center || !(typeof center === 'number' || center instanceof Date)) {
     throw new Error('you must specify center index as the 2nd argument.');
   }
 
@@ -48,7 +50,7 @@ IntervalTree.prototype.add = function(data, id) {
     throw new Error('id ' + id + ' is already registered.');
   }
 
-  if (id == undefined) {
+  if (id === undefined) {
     while (this.intervalHash[this._autoIncrement]) {
       this._autoIncrement++;
     }
@@ -72,14 +74,14 @@ IntervalTree.prototype.add = function(data, id) {
  **/
 IntervalTree.prototype.search = function(val1, val2) {
   var ret = [];
-  if (typeof val1 != 'number') {
+  if (!(typeof val1 === 'number' || val1 instanceof Date)) {
     throw new Error(val1 + ': invalid input');
   }
 
-  if (val2 == undefined) {
+  if (val2 === undefined) {
     _pointSearch.call(this, this.root, val1, ret);
   }
-  else if (typeof val2 == 'number') {
+  else if (typeof val2 === 'number' || val2 instanceof Date) {
     _rangeSearch.call(this, val1, val2, ret);
   }
   else {
@@ -151,7 +153,7 @@ function _pointSearch(node, idx, arr) {
   }
   // exact equal
   else {
-    node.starts.map(function(itvl) { arr.push(itvl.result()) });
+    node.starts.map(function(itvl) { arr.push(itvl.result()); });
   }
 }
 
@@ -219,22 +221,22 @@ function Node(idx) {
   this.idx = idx;
   this.starts = new SortedList({
     compare: function(a, b) {
-      if (a == null) return -1;
-      if (b == null) return  1;
+      if (a === null) return -1;
+      if (b === null) return  1;
       var c = a.start - b.start;
-      return (c > 0) ? 1 : (c == 0)  ? 0 : -1;
+      return (c > 0) ? 1 : (c === 0)  ? 0 : -1;
     }
   });
 
   this.ends = new SortedList({
     compare: function(a, b) {
-      if (a == null) return -1;
-      if (b == null) return  1;
+      if (a === null) return -1;
+      if (b === null) return  1;
       var c = a.end - b.end;
-      return (c < 0) ? 1 : (c == 0)  ? 0 : -1;
+      return (c < 0) ? 1 : (c === 0)  ? 0 : -1;
     }
   });
-};
+}
 
 /**
  * insert an Interval object to this node
@@ -255,7 +257,7 @@ function Interval(data, id, s, e) {
   this.end    = data[e];
   this.data   = data;
 
-  if (typeof this.start != 'number' || typeof this.end != 'number') {
+  if (!(typeof this.start === 'number' || this.start instanceof Date) || !(typeof this.end === 'number' || this.end instanceof Date)) {
     throw new Error('start, end must be number. start: ' + this.start + ', end: ' + this.end);
   }
 
@@ -272,7 +274,7 @@ Interval.prototype.result = function(start, end) {
     id   : this.id,
     data : this.data
   };
-  if (typeof start == 'number' && typeof end == 'number') {
+  if ((typeof start === 'number' || start instanceof Date) && (typeof end === 'number' || end instanceof Date)) {
     /**
      * calc overlapping rate
      **/
