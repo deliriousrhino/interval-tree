@@ -7,7 +7,12 @@
   ],
   "description": "interval tree in javascript",
   "main": "IntervalTree.js",
-  "keywords": ["tree","interval","range","algorithm"],
+  "keywords": [
+    "tree",
+    "interval",
+    "range",
+    "algorithm"
+    ],
   "license": "MIT",
   "ignore": [
     "**/.*",
