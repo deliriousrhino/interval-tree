@@ -1,6 +1,5 @@
 'use strict';
 
-var SortedList = require('sortedlist');
 
 /**
  * IntervalTree
@@ -287,4 +286,3 @@ Interval.prototype.result = function(start, end) {
   return ret;
 };
 
-module.exports = IntervalTree;
