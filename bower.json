@@ -6,7 +6,7 @@
     "SHIN Suzuki <shinout310@gmail.com>"
   ],
   "dependencies": {
-    "sortedlist" : ">=0.1.0"
+    "sortedlist" : "0.3.1"
   },
   "description": "interval tree in javascript",
   "main": "IntervalTree.js",
