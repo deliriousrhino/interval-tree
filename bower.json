@@ -5,6 +5,9 @@
   "authors": [
     "SHIN Suzuki <shinout310@gmail.com>"
   ],
+  "dependencies": {
+    "sortedlist" : ">=0.1.0"
+  }
   "description": "interval tree in javascript",
   "main": "IntervalTree.js",
   "keywords": [
